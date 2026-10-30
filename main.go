@@ -13,8 +13,7 @@ import (
 	"strconv"
 )
 
-var WORKERURL = "Your_Worker_Url.worker.dev , without https and /."
-var URL = "wss://"+WORKERURL
+var URL string
 
 
 func handle(conn net.Conn) {
@@ -103,9 +102,14 @@ func handle(conn net.Conn) {
 
 func main(){
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Print("Enter the password you use it in worker:  ")
-	password, _:= reader.ReadString('\n')
-	password = strings.TrimSpace(password)
+	fmt.Print("Enter the worker url:  ")
+	urlworker, _ := reader.ReadString('\n')
+	urlworker = strings.TrimSpace(urlworker)
+	urlworker = strings.TrimPrefix(urlworker, "wss://")
+	urlworker = strings.TrimPrefix(urlworker, "https://")
+	urlworker = strings.TrimPrefix(urlworker, "http://")
+	urlworker = strings.TrimSuffix(urlworker, "/")
+	URL = "wss://" + urlworker
 	fmt.Println("1: 127.0.0.1")
 	fmt.Println("2: 0.0.0.0")
 	fmt.Print("Choose : ")
